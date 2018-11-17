@@ -14,6 +14,8 @@ app.get("/getRate", function(req, res) {
     var weight = Number(req.query.weight);
     var rate = calculateRate(type, weight);
     
+    type = retrieveType(type);
+    
     var params = {rate: rate, type: type, weight: weight};
     res.render("rate", params);
 });
@@ -22,13 +24,27 @@ app.listen(app.get('port'), function() {
    console.log("Listening on port 5000");
 });
 
+function retrieveType(typeId) {
+    switch (typeId) {
+        case 1:
+            return 'Letters (Stamped)';
+        case 2:
+            return'Letters (Metered)';
+        case 3:
+            return'Large Envelopes (Flats)';
+        case 4:
+            return'First-Class Package Service—Retail';
+    }
+    
+}
+
 function calculateRate(type, weight) {
     if (weight > 13) {
         return 'Over weight limit. Cannot be sent as first class mail.';
     }
     
     if (weight <= 0) {
-        return 'Please enter a weight greater than 0.';
+        return 'Please enter a weight greater than 0';
     }
     
     switch (type) {
